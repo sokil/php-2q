@@ -102,7 +102,7 @@ class TwoQCacheTest extends TestCase
         $this->assertEquals(42, $cache->get("1"));
     }
 
-    public function testSetToMainBufferWithEvictFromMainBuffer()
+    public function testGetWhenMoveToMainBufferWithEvictFromMainBuffer()
     {
         $cache = new TwoQCache(1, 1, 1);
 
@@ -111,6 +111,19 @@ class TwoQCacheTest extends TestCase
         $cache->get("1"); // 1 -> "main"
         $cache->set("3", true); // 3 -> "in", 2 -> "out"
         $cache->get("2"); // 2 -> "main", 1 -> evicted from main
+
+        $this->assertNull($cache->get("1"));
+    }
+
+    public function testSetWhenMoveToMainBufferWithEvictFromMainBuffer()
+    {
+        $cache = new TwoQCache(1, 1, 1);
+
+        $cache->set("1", true); // 1 -> "in"
+        $cache->set("2", true); // 1 -> "out", 2 -> "in"
+        $cache->get("1"); // 1 -> "main"
+        $cache->set("3", true); // 3 -> "in", 2 -> "out"
+        $cache->set("2", false); // 2 -> "main", 1 -> evicted from main
 
         $this->assertNull($cache->get("1"));
     }
