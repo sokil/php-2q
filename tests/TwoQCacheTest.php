@@ -8,6 +8,15 @@ use PHPUnit\Framework\TestCase;
 
 class TwoQCacheTest extends TestCase
 {
+    public function testSetToInBufferTwice()
+    {
+        $cache = new TwoQCache(2, 4, 2);
+        $cache->set("1", true);
+        $cache->set("1", true);
+
+        $this->assertCount(1, $cache);
+    }
+
     public function testGetExistedFromInBuffer()
     {
         $cache = new TwoQCache(2, 4, 2);
@@ -115,5 +124,16 @@ class TwoQCacheTest extends TestCase
         $cache->set("1", false); // 1 -> "main"
 
         $this->assertFalse($cache->get("1"));
+    }
+
+    public function testEvictFromOutBuffer()
+    {
+        $cache = new TwoQCache(1, 1, 1);
+
+        $cache->set("1", true); // 1 -> "in"
+        $cache->set("2", true); // 1 -> "out", 2 -> "in"
+        $cache->set("3", true); // 3 -> "in", 2 -> "out", "1" -> evicted
+
+        $this->assertCount(2, $cache);
     }
 }
