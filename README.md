@@ -12,6 +12,12 @@ The "main" is the largest buffer and contains items that are rarely accessed.
 
 See full description in https://www.vldb.org/conf/1994/P439.PDF
 
+## Installation
+
+```
+composer req sokil/php-2q
+```
+
 ## Usage
 
 ```php
