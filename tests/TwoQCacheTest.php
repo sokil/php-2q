@@ -8,6 +8,19 @@ use PHPUnit\Framework\TestCase;
 
 class TwoQCacheTest extends TestCase
 {
+    public function testGetExistedFromInBuffer()
+    {
+        $cache = new TwoQCache(2, 4, 2);
+        $cache->set("key", true);
+        $this->assertTrue($cache->get("key"));
+    }
+
+    public function testGetNotExistedFromInBuffer()
+    {
+        $cache = new TwoQCache(2, 4, 2);
+        $this->assertNull($cache->get("key"));
+    }
+
     public function testSetOnlyOwerflowsOutBuffer()
     {
         $cache = new TwoQCache(2, 4, 2);
@@ -64,5 +77,43 @@ class TwoQCacheTest extends TestCase
         $this->assertCount(6, $cache);
 
         $this->assertNull($cache->get("1"));
+    }
+
+    public function testSetToMainBufferWillReEnqueueKeyInMainBuffer()
+    {
+        $cache = new TwoQCache(1, 1, 1);
+
+        $cache->set("1", true); // 1 -> "in"
+        $cache->set("2", true); // 1 -> "out", 2 -> "in"
+        $cache->get("1"); // 1 -> "main"
+        $cache->set("3", true); // 3 -> "in", 2 -> "out"
+
+        $cache->set("1", 42); // set in main
+
+        $this->assertEquals(42, $cache->get("1"));
+    }
+
+    public function testSetToMainBufferWithEvictFromMainBuffer()
+    {
+        $cache = new TwoQCache(1, 1, 1);
+
+        $cache->set("1", true); // 1 -> "in"
+        $cache->set("2", true); // 1 -> "out", 2 -> "in"
+        $cache->get("1"); // 1 -> "main"
+        $cache->set("3", true); // 3 -> "in", 2 -> "out"
+        $cache->get("2"); // 2 -> "main", 1 -> evicted from main
+
+        $this->assertNull($cache->get("1"));
+    }
+
+    public function testSetToOutBuffer()
+    {
+        $cache = new TwoQCache(1, 1, 1);
+
+        $cache->set("1", true); // 1 -> "in"
+        $cache->set("2", true); // 1 -> "out", 2 -> "in"
+        $cache->set("1", false); // 1 -> "main"
+
+        $this->assertFalse($cache->get("1"));
     }
 }
