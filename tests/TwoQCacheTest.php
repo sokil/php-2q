@@ -10,7 +10,12 @@ class TwoQCacheTest extends TestCase
 {
     public function testSetToInBufferTwice()
     {
-        $cache = new TwoQCache(2, 4, 2);
+        $cache = new TwoQCache(
+            inQueueCapacity: 2,
+            outQueueCapacity: 4,
+            mainQueueCapacity: 2
+        );
+
         $cache->set("1", true);
         $cache->set("1", true);
 

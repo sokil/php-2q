@@ -11,3 +11,18 @@ but more frequently than those in the "main".
 The "main" is the largest buffer and contains items that are rarely accessed.
 
 See full description in https://www.vldb.org/conf/1994/P439.PDF
+
+## Usage
+
+```
+<?php
+
+$cache = new TwoQCache(
+    inQueueCapacity: 2,
+    outQueueCapacity: 4,
+    mainQueueCapacity: 2
+);
+
+$cache->set('key', 'value');
+$cache->get('key');
+```
