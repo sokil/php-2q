@@ -25,5 +25,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0"
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "test-ci": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover ./clover.xml --coverage-text"
     }
 }
