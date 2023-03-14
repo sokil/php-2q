@@ -42,4 +42,27 @@ class TwoQCacheTest extends TestCase
 
         $this->assertTrue($cache->get("1"));
     }
+
+    public function testEvictFromMainBuffer()
+    {
+        $cache = new TwoQCache(2, 4, 2);
+
+        $cache->set("1", true);
+        $cache->set("2", true);
+        $cache->set("3", true);
+        $cache->set("4", true);
+        $cache->set("5", true);
+        $cache->set("6", true);
+
+        $cache->get("1"); // move to "main" from "out"
+        $cache->get("2"); // move to "main" from "out"
+
+        $cache->set("7", true);
+
+        $cache->get("3"); // move to "main" from "out", evict "1" from main
+
+        $this->assertCount(6, $cache);
+
+        $this->assertNull($cache->get("1"));
+    }
 }
