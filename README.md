@@ -14,7 +14,7 @@ See full description in https://www.vldb.org/conf/1994/P439.PDF
 
 ## Usage
 
-```
+```php
 <?php
 
 $cache = new TwoQCache(
