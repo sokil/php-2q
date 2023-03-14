@@ -1,6 +1,6 @@
 # 2Q Cache Full Version
 
-[![Coverage Status](https://coveralls.io/repos/github/sokil/php-2q/badge.svg?branch=main)](https://coveralls.io/github/sokil/php-2q?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/sokil/php-2q/badge.svg?branch=main&v=1)](https://coveralls.io/github/sokil/php-2q?branch=main)
 
 The Q2 cache algorithm is a caching algorithm that aims to balance between frequently accessed
 and infrequently accessed items in a cache. It works by dividing the cache into three buffers:
